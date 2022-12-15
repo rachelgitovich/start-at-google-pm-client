@@ -1,0 +1,50 @@
+{
+  "name": "project-management-client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@mui/material": "^5.11.0",
+    "@progress/kendo-data-query": "^1.6.0",
+    "@progress/kendo-licensing": "^1.2.2",
+    "@progress/kendo-react-buttons": "^5.9.0",
+    "@progress/kendo-react-form": "^5.9.0",
+    "@progress/kendo-react-indicators": "^5.9.0",
+    "@progress/kendo-react-inputs": "^5.9.0",
+    "@progress/kendo-react-layout": "^5.9.0",
+    "@progress/kendo-react-taskboard": "^5.9.0",
+    "@progress/kendo-theme-default": "^5.12.0",
+    "@progress/kendo-theme-material": "^5.12.0",
+    "cra-template-kendo": "file:../../../AppData/Local/npm-cache/_npx/b702a42a1b530dca/node_modules/cra-template-kendo",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.5",
+    "react-scripts": "5.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "web-vitals": "^3.1.0"
+  }
+}
