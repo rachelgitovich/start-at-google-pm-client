@@ -5,11 +5,11 @@ const authUtils = {
     const token = localStorage.getItem('token')
     if (!token) return false
     try {
-      const res = await authApi.verifyToken()
-      return res.user
+      //TODO: verify token and return user data
     } catch {
       return false
     }
+    return true;
   }
 }
 
