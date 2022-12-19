@@ -1,4 +1,3 @@
-import authApi from "../api/authApi"
 
 const authUtils = {
   isAuthenticated: async () => {
