@@ -27,14 +27,8 @@ export const FormInput = (fieldRenderProps) => {
   return (
     <FieldWrapper>
       <div className={'k-form-field-wrap'}>
-        <FloatingLabel
-          editorId={id}
-          editorValid={valid}
-          editorDisabled={disabled}
-          optional={optional}
-          label={label}
-        >
           <Input
+          label={label}
             valid={valid}
             type={type}
             id={id}
@@ -42,7 +36,6 @@ export const FormInput = (fieldRenderProps) => {
             ariaDescribedBy={`${hintId} ${errorId}`}
             {...others}
           />
-        </FloatingLabel>
         {showHint && <Hint id={hintId}>{hint}</Hint>}
         {showValidationMessage && (
           <Error id={errorId}>{validationMessage}</Error>

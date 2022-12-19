@@ -2,58 +2,56 @@ import { Button } from '@progress/kendo-react-buttons';
 import { Form, Field, FormElement } from '@progress/kendo-react-form';
 import React, { useState } from 'react';
 import { FormInput } from './FormInput';
+import { Input } from '@progress/kendo-react-inputs';
+
 import { useNavigate } from 'react-router-dom';
 
 //import authApi from '../api/authApi'
 
 const Login = () => {
-  const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
-  const [usernameErrText, setUsernameErrText] = useState('')
-  const [passwordErrText, setPasswordErrText] = useState('')
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState('');
+
+  const [usernameErrText, setUsernameErrText] = useState('');
+  const [passwordErrText, setPasswordErrText] = useState('');
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setUsernameErrText('')
-    setPasswordErrText('')
+    e.preventDefault();
+    setLoading(true);
+    const data = new FormData(e.target);
+    const email = data.get('email').trim();
+    const password = data.get('password').trim();
 
-    const data = new FormData(e.target)
-    const username = data.get('username').trim()
-    const password = data.get('password').trim()
+    let myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
 
-    let err = false
+    let raw = JSON.stringify({
+      email: email,
+      password: password,
+    });
 
-    if (username === '') {
-      err = true
-      setUsernameErrText('Please fill this field')
-    }
-    if (password === '') {
-      err = true
-      setPasswordErrText('Please fill this field')
-    }
+    let requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
 
-    if (err) return
-
-    setLoading(true)
-
-    try {
-    //   const res = await authApi.login({ username, password })
-    //   setLoading(false)
-    //   localStorage.setItem('token', res.token)
-    //   navigate('/')
-    } catch (err) {
-      const errors = err.data.errors
-      errors.forEach(e => {
-        if (e.param === 'username') {
-          setUsernameErrText(e.msg)
+    fetch('http://localhost:8080/api/v1/auth/authenticate', requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((result) => {
+            localStorage.setItem('token', result.data);
+            navigate('/');
+          });
         }
-        if (e.param === 'password') {
-          setPasswordErrText(e.msg)
+        else{
+          response.json().then((result)=>alert(result.message))
         }
       })
-      setLoading(false)
-    }
-  }
+      .catch((error) => console.log('error', error));
+  };
   return (
     <>
       <div className='signup-box'>
@@ -61,70 +59,68 @@ const Login = () => {
           src='ce5e4258e08e36c337f68f7d7c54764c.jpg'
           className='signup-img'
         />
-        <Form
-          className='k-mt-1'
-          component='form'
-          onSubmit={handleSubmit}
-          render={(formRenderProps) => (
-            <FormElement
-              style={{
-                width: 400,
-                margin: 'auto',
-              }}
+        <form className='k-form k-mt-1' onSubmit={handleSubmit}>
+          <fieldset className='k-form-fieldset  k-d-inline-block k-ml-auto k-mr-auto'>
+            <div className='mb-3'>
+              <Input
+                validityStyles={false}
+                name='email'
+                label='Email'
+                type='email'
+                minLength={2}
+                required={true}
+                margin='normal'
+                fullWidth
+                id={'Email'}
+                disabled={loading}
+              />
+            </div>
+            <div className='mb-3'>
+              <Input
+                validityStyles={false}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                pattern='^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,20}$'
+                name='password'
+                type='password'
+                label='Password'
+                required={true}
+                margin='normal'
+                fullWidth
+                id={'password'}
+                disabled={loading}
+                minLength={8}
+                maxLength={20}
+              />
+            </div>
+            <Button
+              className='k-mt-3 k-mb-2'
+              themeColor={'primary'}
+              type={'submit'}
             >
-              <fieldset
-                className={
-                  'k-form-fieldset  k-d-inline-block k-ml-auto k-mr-auto'
-                }
-              >
-                <Field
-                  margin='normal'
-                  required
-                  fullWidth
-                  id={'Username'}
-                  name={'username'}
-                  label={'Username'}
-                  disabled={loading}
-                  component={FormInput}
-                />
-                <Field
-                  margin='normal'
-                  required
-                  fullWidth
-                  type='password'
-                  id={'password'}
-                  name={'password'}
-                  label={'Password'}
-                  disabled={loading}
-                  component={FormInput}
-                />
+              Login
+            </Button>
+          </fieldset>
+        </form>
 
-                <Button
-                  className='k-mt-3 k-mb-2'
-                  themeColor={'primary'}
-                  type={'submit'}
-                >Login
-                </Button>
-              </fieldset>
-            </FormElement>
-          )}
-        />
         <div className='k-d-flex k-flex-column'>
-          <Button themeColor={'info'} fillMode='outline' icon='facebook'>
-            Login with facebook
+        <Button
+            className='k-mt-3 k-mb-2 google-btn'
+            iconClass='fa-brands fa-github fa-fw'
+          >
+            Sign up with GitHub
           </Button>
           <Button
             fillMode='flat'
             themeColor={'primary'}
-            onClick={()=>navigate('/signup')}
+            onClick={() => navigate('/signup')}
           >
             Don't have an account? Sign up
           </Button>
         </div>
       </div>
     </>
-    
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
