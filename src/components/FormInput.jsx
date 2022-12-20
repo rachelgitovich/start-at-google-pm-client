@@ -1,12 +1,11 @@
-import * as React from 'react';
 import { FieldWrapper } from '@progress/kendo-react-form';
 import { Input } from '@progress/kendo-react-inputs';
-import {
-  Label,
-  Error,
-  Hint,
-  FloatingLabel,
-} from '@progress/kendo-react-labels';
+import
+  {
+    Error,
+    Hint
+  } from '@progress/kendo-react-labels';
+import * as React from 'react';
 export const FormInput = (fieldRenderProps) => {
   const {
     validationMessage,

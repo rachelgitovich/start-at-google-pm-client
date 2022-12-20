@@ -1,16 +1,9 @@
-//import { useSelector, useDispatch } from 'react-redux'
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
-//import { setBoards } from '../../redux/features/boardSlice'
-import { Drawer, DrawerContent } from '@progress/kendo-react-layout';
-import { Route, Routes } from 'react-router-dom';
-import Board from './Board';
+import { Drawer } from '@progress/kendo-react-layout';
+import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Sidebar = () => {
-  // const user = useSelector((state) => state.user.value)
-  // const boards = useSelector((state) => state.board.value)
   const navigate = useNavigate();
-  //const dispatch = useDispatch()
   const { boardId } = useParams();
   const [expanded, setExpanded] = useState(true);
   const sidebarWidth = 250;
@@ -51,7 +44,7 @@ const Sidebar = () => {
       }))}
     />
      
-    // </Drawer>
+   
   );
 };
 

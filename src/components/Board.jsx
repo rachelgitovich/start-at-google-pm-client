@@ -1,10 +1,10 @@
-import * as React from "react";
-import { TaskBoard, TaskBoardToolbar } from '@progress/kendo-react-taskboard';
-import { Button } from '@progress/kendo-react-buttons';
 import { filterBy } from '@progress/kendo-data-query';
-import { Column } from './Column';
-import { Card } from './Card';
+import { Button } from '@progress/kendo-react-buttons';
+import { TaskBoard, TaskBoardToolbar } from '@progress/kendo-react-taskboard';
+import * as React from "react";
 import { cards } from '../cards';
+import { Card } from './Card';
+import { Column } from './Column';
 const tasks = cards.map(c => ({
   id: c.id,
   title: c.title,

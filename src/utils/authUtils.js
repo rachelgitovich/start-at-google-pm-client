@@ -1,6 +1,6 @@
 
 const authUtils = {
-  isAuthenticated: async () => {
+  isAuthenticated: () => {
     const token = localStorage.getItem('token')
     if (!token) return false
     try {

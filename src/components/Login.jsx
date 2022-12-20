@@ -1,20 +1,17 @@
 import { Button } from '@progress/kendo-react-buttons';
-import { Form, Field, FormElement } from '@progress/kendo-react-form';
-import React, { useState } from 'react';
-import { FormInput } from './FormInput';
 import { Input } from '@progress/kendo-react-inputs';
-
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-//import authApi from '../api/authApi'
 
-const Login = () => {
+const Login = ({setIsAuthenticated}) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState('');
+useEffect(() => {
+ console.log(setIsAuthenticated)
+}, [])
 
-  const [usernameErrText, setUsernameErrText] = useState('');
-  const [passwordErrText, setPasswordErrText] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,6 +40,7 @@ const Login = () => {
         if (response.ok) {
           response.json().then((result) => {
             localStorage.setItem('token', result.data);
+            setIsAuthenticated(true)
             navigate('/');
           });
         }
