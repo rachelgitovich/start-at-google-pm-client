@@ -8,10 +8,6 @@ const Login = ({setIsAuthenticated}) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState('');
-useEffect(() => {
- console.log(setIsAuthenticated)
-}, [])
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();

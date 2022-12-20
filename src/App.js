@@ -16,10 +16,7 @@ export default function App() {
   useEffect(() => {
     setIsAuthenticated(authUtils.isAuthenticated());
   });
-  useEffect(() => {
-    debugger;
-    console.log('isAuthenticated', isAuthenticated);
-  }, [isAuthenticated]);
+ 
   return (
     <BrowserRouter>
       <Routes>
