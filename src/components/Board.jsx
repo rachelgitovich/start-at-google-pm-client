@@ -1,7 +1,8 @@
 import { filterBy } from '@progress/kendo-data-query';
 import { Button } from '@progress/kendo-react-buttons';
 import { TaskBoard, TaskBoardToolbar } from '@progress/kendo-react-taskboard';
-import * as React from "react";
+import { useParams } from 'react-router-dom';
+import React,{useEffect} from "react";
 import { cards } from '../cards';
 import { Card } from './Card';
 import { Column } from './Column';
@@ -35,7 +36,13 @@ const priorities = [{
   priority: 'Urgent',
   color: 'orange'
 }];
-const Board = () => {
+const Board = () =>
+{
+  const { boardId } = useParams();
+  useEffect(() => {
+    console.log(boardId)
+  }, [])
+  
   const [filter, setFilter] = React.useState('');
   const [taskData, setTaskData] = React.useState(tasks);
   const [columnsData, setColumnsData] = React.useState(columns);

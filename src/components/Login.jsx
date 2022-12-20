@@ -37,7 +37,7 @@ const Login = ({setIsAuthenticated}) => {
           response.json().then((result) => {
             localStorage.setItem('token', result.data);
             setIsAuthenticated(true)
-            navigate('/');
+             navigate('/');
           });
         }
         else{
@@ -98,12 +98,13 @@ const Login = ({setIsAuthenticated}) => {
         </form>
 
         <div className='k-d-flex k-flex-column'>
-        <Button
-            className='k-mt-3 k-mb-2 google-btn'
-            iconClass='fa-brands fa-github fa-fw'
+          <a
+            href='https://github.com/login/oauth/authorize?client_id=3832c4b642dd6c67333d&scope=user:email'
+            className='k-button k-button-md k-button-solid k-button-solid-base k-rounded-md k-mt-3 k-mb-2 google-btn'
           >
-            Sign up with GitHub
-          </Button>
+            <i className='k-button-icon fa-brands fa-github fa-fw'></i>
+            Login with GitHub
+          </a>
           <Button
             fillMode='flat'
             themeColor={'primary'}

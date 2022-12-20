@@ -1,5 +1,6 @@
 import { Button } from '@progress/kendo-react-buttons';
 import { Input } from '@progress/kendo-react-inputs';
+import { async } from 'q';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SignUpPopup from './SignUpPopup';
@@ -43,8 +44,6 @@ const Signup = () => {
       .then((response) => {
         if (response.status !== 201) response.json();
         else {
-          // alert("user created successfully")
-          // navigate('/login');
           setShowPopup(true);
           return;
         }
@@ -126,12 +125,13 @@ const Signup = () => {
           </Button>
         </form>
         <div className='k-d-flex k-flex-column'>
-          <Button
-            className='k-mt-3 k-mb-2 google-btn'
-            iconClass='fa-brands fa-github fa-fw'
+          <a
+            href='https://github.com/login/oauth/authorize?client_id=3832c4b642dd6c67333d&scope=user:email'
+            className='k-button k-button-md k-button-solid k-button-solid-base k-rounded-md k-mt-3 k-mb-2 google-btn'
           >
+            <i className='k-button-icon fa-brands fa-github fa-fw'></i>
             Sign up with GitHub
-          </Button>
+          </a>
           <Button
             fillMode='flat'
             themeColor={'primary'}
@@ -141,7 +141,7 @@ const Signup = () => {
           </Button>
         </div>
       </div>
-      {showPopup && <SignUpPopup/>}
+      {showPopup && <SignUpPopup />}
     </>
   );
 };

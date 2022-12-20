@@ -1,7 +1,7 @@
-import { Drawer } from '@progress/kendo-react-layout';
+import { Drawer, DrawerContent } from '@progress/kendo-react-layout';
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-
+import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
+import Board from './Board';
 const Sidebar = () => {
   const navigate = useNavigate();
   const { boardId } = useParams();
@@ -29,22 +29,26 @@ const Sidebar = () => {
     }
   ];
   const onSelect=(e)=>{
-    navigate(e.itemTarget.props.route)
+    navigate(`/boards/${e.itemTarget.props.id}`)
   }
   return (
     <Drawer
-    onSelect={onSelect}
+      onSelect={onSelect}
       expanded={true}
       position={'start'}
       mode={'push'}
       width={220}
       items={items.map((item) => ({
         ...item,
-        selected: item.id==boardId,
+        selected: item.id == boardId,
       }))}
-    />
-     
-   
+    >
+      {/* <DrawerContent>
+        <Routes>
+          <Route path='boards/:boardId' element={<Board />} />
+        </Routes>
+      </DrawerContent> */}
+    </Drawer>
   );
 };
 
