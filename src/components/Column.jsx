@@ -1,9 +1,9 @@
-import * as React from 'react';
 import { Button } from '@progress/kendo-react-buttons';
 import { classNames } from '@progress/kendo-react-common';
-import { Input } from '@progress/kendo-react-inputs';
 import { Badge, BadgeContainer } from '@progress/kendo-react-indicators';
+import { Input } from '@progress/kendo-react-inputs';
 import { TaskBoardColumn } from '@progress/kendo-react-taskboard';
+import * as React from 'react';
 const themeColor = {
   'todo': 'warning',
   'inProgress': 'info',

@@ -1,5 +1,5 @@
-import React from 'react'
 import { Loader } from "@progress/kendo-react-indicators";
+import React from 'react';
 
 const Loading = props => {
   return (

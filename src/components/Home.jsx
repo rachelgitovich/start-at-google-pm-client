@@ -1,20 +1,12 @@
 import { Button } from '@progress/kendo-react-buttons'
-import { useNavigate } from "react-router-dom"
-//import { useDispatch } from "react-redux"
 import React from 'react'
+import { useNavigate } from "react-router-dom"
 
 export default function Home() {
     const navigate = useNavigate()
-   // const dispatch = useDispatch()
   
     const createBoard = async () => {
-    //   try {
-    //     const res = await boardApi.create()
-    //     dispatch(setBoards([res]))
-    //     navigate(`/boards/${res.id}`)
-    //   } catch (err) {
-    //     alert(err)
-    //   } 
+   
     }
   
     return (
