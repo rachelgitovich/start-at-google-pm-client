@@ -1,15 +1,19 @@
-import React from 'react'
-import Sidebar from '../SideBar'
-import { Outlet } from 'react-router-dom'
+import React, { useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import Sidebar from '../SideBar';
 
+export default function AppLayout({isAuthenticated}) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!isAuthenticated) navigate('/login');
+  });
 
-export default function AppLayout() {
   return (
     <div className='appLayout'>
-        <Sidebar />
-        <div className='app-content'>
-          <Outlet />
-        </div>
+      <Sidebar />
+      <div className='app-content'>
+        <Outlet />
       </div>
-  )
+    </div>
+  );
 }

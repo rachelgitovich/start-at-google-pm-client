@@ -1,7 +1,6 @@
-import * as React from 'react';
-import { TaskBoardCard, TaskBoardCardHeader } from '@progress/kendo-react-taskboard';
 import { CardBody } from '@progress/kendo-react-layout';
-import { cards } from '../cards';
+import { TaskBoardCard, TaskBoardCardHeader } from '@progress/kendo-react-taskboard';
+import * as React from 'react';
 const CardHeaderComponent = props => {
   return <TaskBoardCardHeader {...props} title={props.task.title} />;
 };
