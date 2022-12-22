@@ -23,3 +23,10 @@ yarn-debug.log*
 yarn-error.log*
 
 .vscode
+
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+.idea/
