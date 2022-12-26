@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   AppBar,
@@ -7,63 +8,62 @@ import {
 } from "@progress/kendo-react-layout";
 
 import { Badge, BadgeContainer } from "@progress/kendo-react-indicators";
-import DropDownNotification from "./DropDownNotificationList";
+import NotificationList from "./NotificationList";
 
 const NavBar = () => {
-  const getUserNotification = async () => {
-    fetch("http://localhost:8080/api/v1/user/userNotification", {
-      method: "GET",
-      headers: new Headers({
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      }),
-    })
-      .then((response) => response.json())
-      .then((result) => console.log(result))
-      .then(showNotificationList())
-      .catch((error) => console.log("error", error));
-  };
-
-  function showNotificationList() {
-    document.getElementById("dropDownNotification").classList.toggle("show");
-  }
-
-  // document.getElementById("dropDownNotification").kendoDropDownButton({
-  //   //icon: "paste",
-  //   items: [
-  //     {
-  //       text: "notification 1",
-  //     },
-  //     {
-  //       text: "notification 2",
-  //     },
-  //   ],
-  // });
+  const [notificationVisible, setNotificationVisible] = useState(false);
+  const navigate = useNavigate();
+  const currentRef = React.useRef();
 
   return (
     <>
       <AppBar>
         <AppBarSection>
-          <h1 className="title">Task management</h1>
+          <h1
+            className="title"
+            onClick={() => {
+              navigate("/home");
+            }}
+          >
+            Task management
+          </h1>
         </AppBarSection>
 
         <AppBarSpacer />
 
+        <AppBarSection>
+          <div>
+            <button
+              onClick={() => {
+                navigate("/notify");
+              }}
+              className="k-button k-button-md k-rounded-md k-button-flat k-button-flat-base"
+            >
+              <BadgeContainer>
+                <span className="k-icon k-i-gear" />
+              </BadgeContainer>
+            </button>
+          </div>
+        </AppBarSection>
+
         <AppBarSection className="actions">
-          <div class="dropdown">
+          <div>
             <button
               className="k-button k-button-md k-rounded-md k-button-flat k-button-flat-base"
-              onClick={getUserNotification}
+              onClick={() => {
+                setNotificationVisible(!notificationVisible);
+              }}
             >
               <BadgeContainer>
                 <span className="k-icon k-i-bell" />
                 <Badge themeColor="info" size="small" position="inside" />
               </BadgeContainer>
             </button>
-            <DropDownNotification />
           </div>
         </AppBarSection>
       </AppBar>
+      {notificationVisible && <NotificationList ref={currentRef} />}
+
       <style>{`
                 body {
                     background: #dfdfdf;
@@ -92,27 +92,7 @@ const NavBar = () => {
                 .k-badge-container {
                     margin-right: 8px;
                 }
-                .dropdown{
-                   position: relative;
-                   display: inline-block;
-                }
-                .dropdown-notification{
-                  display: none;
-                  position: absolute;
-                  background-color: #f1f1f1;
-                  min-width: 160px;
-                  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-                  z-index: 1;
-                }
-                .dropdown-content p {
-                color: black;
-                padding: 12px 16px;
-                text-decoration: none;
-                display: block;
-                }
-                .show {display:block;}
-
-            `}</style>
+                `}</style>
     </>
   );
 };

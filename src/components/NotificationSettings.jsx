@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Switch } from "@progress/kendo-react-inputs";
 import { Checkbox } from "@progress/kendo-react-inputs";
 
@@ -31,6 +31,23 @@ const NotificationSetting = () => {
             setCheckedUserAddedToTheSystem(
               result.data["USER_ADDED_TO_THE_SYSTEM"]
             );
+          });
+        }
+      })
+      .catch((error) => console.log("error", error));
+  }, []);
+
+  useEffect(() => {
+    fetch(
+      "http://localhost:8080/api/v1/user/getUserNotificationBySettings",
+      requestOptionsGet
+    )
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((result) => {
+            console.log(result);
+            setCheckedEmailNotify(result.data["email"]);
+            setCheckedPopupNotify(result.data["popup"]);
           });
         }
       })
