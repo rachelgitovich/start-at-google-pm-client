@@ -7,45 +7,26 @@ import {
 } from "@progress/kendo-react-layout";
 
 import { Badge, BadgeContainer } from "@progress/kendo-react-indicators";
+import DropDownNotification from "./DropDownNotificationList";
 
 const NavBar = () => {
-  const token = localStorage.getItem("token");
   const getUserNotification = async () => {
     fetch("http://localhost:8080/api/v1/user/userNotification", {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: new Headers({
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      }),
     })
       .then((response) => response.json())
-      .then((result) => console.log(result.body()))
+      .then((result) => console.log(result))
+      .then(showNotificationList())
       .catch((error) => console.log("error", error));
   };
 
   function showNotificationList() {
     document.getElementById("dropDownNotification").classList.toggle("show");
   }
-
-  const updateNotifyByEmail = async (choice) => {
-    fetch("http://localhost:8080/api/v1/user/notify", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      data: {
-        notify: choice,
-      },
-    });
-  };
-
-  const submitNotify = () => {
-    let emailNotify = document.getElementById("emailNotify").value;
-    //TODO: create endpoint check popup notification setting.
-    //let popupNotify = document.getElementById("popupNotify").value;
-
-    if (!isNaN(parseInt(emailNotify))) updateNotifyByEmail(true);
-    else updateNotifyByEmail(false);
-  };
 
   // document.getElementById("dropDownNotification").kendoDropDownButton({
   //   //icon: "paste",
@@ -68,37 +49,18 @@ const NavBar = () => {
 
         <AppBarSpacer />
 
-        <AppBarSection>
-          <input type="checkbox" id="emailNotify" value="emailNotify"></input>
-          <label for="emailNotify"> get email notification </label>
-
-          <input type="checkbox" id="popupNotify" value="popupNotify"></input>
-          <label for="popupNotify">get popup notification</label>
-
-          <button onclick={submitNotify}>Submit</button>
-        </AppBarSection>
-
         <AppBarSection className="actions">
           <div class="dropdown">
             <button
               className="k-button k-button-md k-rounded-md k-button-flat k-button-flat-base"
-              //onClick={getUserNotification}
-              onClick={showNotificationList}
+              onClick={getUserNotification}
             >
               <BadgeContainer>
                 <span className="k-icon k-i-bell" />
-                <Badge
-                  shape="dot"
-                  themeColor="info"
-                  size="small"
-                  position="inside"
-                />
+                <Badge themeColor="info" size="small" position="inside" />
               </BadgeContainer>
             </button>
-            <div id="dropDownNotification" class="dropdown-notification">
-              <p>notification 1</p>
-              <p>notification 2</p>
-            </div>
+            <DropDownNotification />
           </div>
         </AppBarSection>
       </AppBar>
