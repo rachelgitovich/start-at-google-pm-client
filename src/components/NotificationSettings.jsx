@@ -199,6 +199,7 @@ const NotificationSetting = () => {
           onChange={handleNotificationSetting}
         />
         <label for="emailNotify"> get email notification </label>
+        <br />
 
         <Switch
           id="popupNotify"
