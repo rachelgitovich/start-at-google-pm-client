@@ -14,6 +14,7 @@
     "@progress/kendo-react-indicators": "^5.9.0",
     "@progress/kendo-react-inputs": "^5.9.0",
     "@progress/kendo-react-layout": "^5.9.0",
+    "@progress/kendo-react-listview": "^5.9.0",
     "@progress/kendo-react-taskboard": "^5.9.0",
     "@progress/kendo-theme-default": "^5.12.0",
     "@progress/kendo-theme-material": "^5.12.0",
