@@ -1,10 +1,9 @@
 import { Button } from '@progress/kendo-react-buttons';
 import { Input } from '@progress/kendo-react-inputs';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
-const Login = ({setIsAuthenticated}) => {
+const Login = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState('');
@@ -36,12 +35,11 @@ const Login = ({setIsAuthenticated}) => {
         if (response.ok) {
           response.json().then((result) => {
             localStorage.setItem('token', result.data);
-            setIsAuthenticated(true)
-             navigate('/');
+            setIsAuthenticated(true);
+            navigate('/');
           });
-        }
-        else{
-          response.json().then((result)=>alert(result.message))
+        } else {
+          response.json().then((result) => alert(result.message));
         }
       })
       .catch((error) => console.log('error', error));
@@ -64,7 +62,6 @@ const Login = ({setIsAuthenticated}) => {
                 minLength={2}
                 required={true}
                 margin='normal'
-                fullWidth
                 id={'Email'}
                 disabled={loading}
               />
@@ -80,7 +77,6 @@ const Login = ({setIsAuthenticated}) => {
                 label='Password'
                 required={true}
                 margin='normal'
-                fullWidth
                 id={'password'}
                 disabled={loading}
                 minLength={8}
