@@ -3,9 +3,8 @@ import { Dialog, DialogActionsBar } from '@progress/kendo-react-dialogs';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
 export default function SignUpPopup() {
-    const navigate=useNavigate();
+  const navigate = useNavigate();
   return (
     <Dialog>
       <p
@@ -17,7 +16,7 @@ export default function SignUpPopup() {
         User registered successfully!
       </p>
       <DialogActionsBar>
-        <Button themeColor={'primary'} onClick={()=>navigate('/login')}>
+        <Button themeColor={'primary'} onClick={() => navigate('/login')}>
           OK
         </Button>
       </DialogActionsBar>

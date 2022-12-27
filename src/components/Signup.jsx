@@ -1,6 +1,5 @@
 import { Button } from '@progress/kendo-react-buttons';
 import { Input } from '@progress/kendo-react-inputs';
-import { async } from 'q';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SignUpPopup from './SignUpPopup';
@@ -70,7 +69,6 @@ const Signup = () => {
                 minLength={2}
                 required={true}
                 margin='normal'
-                fullWidth
                 id={'Email'}
                 disabled={loading}
               />
@@ -86,7 +84,6 @@ const Signup = () => {
                 label='Password'
                 required={true}
                 margin='normal'
-                fullWidth
                 id={'password'}
                 disabled={loading}
                 minLength={8}
@@ -110,7 +107,6 @@ const Signup = () => {
                 validationMessage={confirmPasswordValidationMessage}
                 margin='normal'
                 required
-                fullWidth
                 id={'confirmPassword'}
                 disabled={loading}
               />
