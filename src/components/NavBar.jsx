@@ -17,7 +17,7 @@ const NavBar = () => {
 
   return (
     <>
-      <AppBar>
+      <AppBar  className="navbar">
         <AppBarSection>
           <h1
             className="title"
@@ -63,7 +63,7 @@ const NavBar = () => {
         </AppBarSection>
       </AppBar>
       {notificationVisible && <NotificationList ref={currentRef} />}
-
+{/* 
       <style>{`
                 body {
                     background: #dfdfdf;
@@ -92,7 +92,7 @@ const NavBar = () => {
                 .k-badge-container {
                     margin-right: 8px;
                 }
-                `}</style>
+                `}</style> */}
     </>
   );
 };

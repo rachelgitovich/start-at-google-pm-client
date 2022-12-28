@@ -96,7 +96,7 @@ const Login = ({ setIsAuthenticated }) => {
         <div className='k-d-flex k-flex-column'>
           <a
             href='https://github.com/login/oauth/authorize?client_id=3832c4b642dd6c67333d&scope=user:email'
-            className='k-button k-button-md k-button-solid k-button-solid-base k-rounded-md k-mt-3 k-mb-2 google-btn'
+            className='k-button k-button-md k-button-solid k-button-solid-base k-rounded-md k-mt-3 k-mb-2 github-btn'
           >
             <i className='k-button-icon fa-brands fa-github fa-fw'></i>
             Login with GitHub
