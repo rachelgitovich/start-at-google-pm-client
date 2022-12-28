@@ -4,8 +4,25 @@ import { TaskBoard, TaskBoardToolbar } from '@progress/kendo-react-taskboard';
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import useLocalStorageState from 'use-local-storage-state';
+import {fetchEventSource} from "@microsoft/fetch-event-source";
 import { Card } from './Card';
 import { Column } from './Column';
+
+const EditType = [{
+  type: 'CREATE'
+},
+{
+  type: 'DELETE'
+},
+{
+  type: 'UPDATE_TYPE'
+},
+{
+  type: 'UPDATE_STATUS'
+},
+{
+  type: 'COMMENT_ADD'
+}]
 
 const priorities = [
   {
@@ -44,18 +61,119 @@ const Board = () => {
   });
   const { boardId } = useParams();
 
+  let requestOptions = {
+    method: 'GET',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    }),
+    redirect: 'follow',
+  };
+
   useEffect(() => {
-    localStorage.setItem('boardId', boardId);
-    localStorage.removeItem('statuses');
-    localStorage.removeItem('types');
-    let requestOptions = {
-      method: 'GET',
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      }),
-      redirect: 'follow',
+    console.log(boardId)
+
+    const fetchData = async () => {
+      await fetchEventSource('http://localhost:8080/api/v1/subscribe?boardId=' + boardId, {
+        method: 'GET',
+        headers: {
+          // 'Content-Type': 'application/json',
+          'Accept': 'text/event-stream',
+          'Connection': 'keep-alive',
+          'Cache-Control': 'no-cache',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        onopen(res) {
+          if (res.ok && res.status === 200) {
+            console.log("Connection made ", res);
+          } else if (
+              res.status >= 400 &&
+              res.status < 500 &&
+              res.status !== 429
+          ) {
+            console.log("Client side error ", res);
+          }
+        },
+        onmessage(event) {
+          let data = JSON.parse(event.data);
+          console.log(data);
+          if (event.event === 'CREATE') {
+            if (Object.keys(data)[0] === 'ITEM') {
+              // addItem(data['ITEM']);
+              let oldTasks = [...taskData];
+              oldTasks.push({
+                id: data['ITEM'].id,
+                title: data['ITEM'].title,
+                description: data['ITEM'].description,
+                status: data['ITEM'].status,
+                priority: priorities.find(
+                    (p) => p.priority == data['ITEM'].importance
+                ),
+                type: data['ITEM'].type,
+                assignedTo: data['ITEM'].assignedTo,
+                comments: data['ITEM'].comments,
+                creatorId: data['ITEM'].creator.id,
+                dueDate: data['ITEM'].dueDate,
+              });
+              setTaskData([...oldTasks])
+            }
+          }
+          if (event.event === 'DELETE') {
+            if (Object.keys(data)[0] === 'ITEM') {
+              // addItem(data['ITEM']);
+              let oldTasks = [...taskData];
+              setTaskData([...oldTasks.filter((t) => t.id !== data['ITEM'].id)]);
+            }
+          }
+          if (event.event === 'UPDATE') {
+            if (Object.keys(data)[0] === 'ITEM') {
+              const newTask = JSON.parse(event.data);
+              let oldTasks = [...taskData];
+              oldTasks = oldTasks.map((t) =>
+                  data['ITEM'].id === t.id
+                      ? {
+                        id: data['ITEM'].id,
+                        title: data['ITEM'].title,
+                        description: data['ITEM'].data.description,
+                        status: data['ITEM'].status,
+                        priority: priorities.find(
+                            (p) => p.priority == data['ITEM'].importance
+                        ),
+                        type: data['ITEM'].type,
+                        assignedTo: data['ITEM'].assignedTo,
+                        comments: data['ITEM'].comments,
+                        creatorId: data['ITEM'].creator.id,
+                        dueDate: data['ITEM'].dueDate,
+                      }
+                      : t
+              );
+              setTaskData([...oldTasks]);
+            }
+          }
+          if (event.event === 'UPDATE') {
+            if (Object.keys(data)[0] === 'ITEM_TYPE') {
+              console.log("Updating Item Type");
+            }
+          }
+          if (event.event === 'UPDATE') {
+            if (Object.keys(data)[0] === 'ITEM_STATUS') {
+              // addItem(data['ITEM']);
+              console.log("Updating Item status")
+            }
+          }
+          if (event.event === 'ADD') {
+            if (Object.keys(data)[0] === 'COMMENT') {
+              console.log("ADDING COMMENT")
+            }
+          }
+          //console.log(JSON.parse(event.data));
+          //const parsedData = JSON.parse(event.data);
+          //setData((data) => [...data, parsedData]);
+        },
+      });
     };
+    fetchData();
+
     fetch('http://localhost:8080/api/v1/board/' + boardId, requestOptions)
       .then((response) => {
         if (response.ok) {
@@ -109,7 +227,8 @@ const Board = () => {
 
   const onChangeHandler = useCallback(
     (event) => {
-      if (event.type === 'task') {
+      console.log("Event " + event);
+    if (event.type === 'task') {
         if (event.item.status === event.previousItem.status) {
           return;
         }
@@ -176,6 +295,17 @@ const Board = () => {
     };
     setColumnsData([...columnsData, newColumn]);
   };
+
+  const addItem = (data) => {
+    const newTask = {
+      id: data.id,
+      title: data.title,
+      description: data.description,
+      status: data.status,
+      priority: data.importance
+    };
+    setTaskData([...taskData, newTask]);
+  }
 
   return (
     <TaskBoard
