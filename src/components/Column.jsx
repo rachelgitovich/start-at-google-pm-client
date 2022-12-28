@@ -6,6 +6,7 @@ import { TaskBoardColumn } from '@progress/kendo-react-taskboard';
 import React, { useState, useEffect } from 'react';
 import useLocalStorageState from 'use-local-storage-state';
 import TaskEditDialog from './TaskEditDialog';
+import  ConfirmDeleteDialog  from './ConfirmDeleteDialog';
 const colors = ['primary', 'secondary', 'warning', 'info', 'success', 'dark'];
 
 const ColumnHeader = (props) => {
@@ -17,7 +18,7 @@ const ColumnHeader = (props) => {
     defaultValue: props.column.status,
   });
   const addItem = () => {
-    setStatus(props.column.status);
+    setStatus(props.column.title);
     props.onShowAddCardDialog();
   };
   return (
@@ -106,6 +107,17 @@ export const Column = (props) => {
           onSave={props.onTaskCreate}
           priorities={props.priorities}
           editPane={TaskEditDialog}
+        />
+      )}
+
+      {props.showColumnConfirmDelete && (
+        <ConfirmDeleteDialog
+          onClose={props.onColumnDelete}
+          onConfirm={props.onColumnConfirmDelete}
+          dialogMessage={props.confirmDialogMessage}
+          dialogTitle={props.confirmDialogTitle}
+          dialogConfirmButton={props.confirmDialogConfirmButton}
+          dialogCancelButton={props.confirmDialogCancelButton}
         />
       )}
     </>

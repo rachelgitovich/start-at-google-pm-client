@@ -1,11 +1,13 @@
 import { Drawer } from '@progress/kendo-react-layout';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
-const Sidebar = () => {
+import useLocalStorageState from 'use-local-storage-state';
+const Sidebar = (props) => {
   const navigate = useNavigate();
   const { boardId } = useParams();
-  const [boards, setBoards] = useState([]);
+  const [boards, setBoards] = useLocalStorageState('boards', {
+    defaultValue: [],
+  });
 
   const onSelect = (e) => {
     navigate(`/boards/${e.itemTarget.props.id}`);
@@ -36,6 +38,7 @@ const Sidebar = () => {
 
   return (
     <Drawer
+   
       onSelect={onSelect}
       expanded={true}
       position={'start'}
@@ -46,7 +49,8 @@ const Sidebar = () => {
         id: board.id,
         selected: board.id == boardId,
       }))}
-    ></Drawer>
+    >
+    </Drawer>
   );
 };
 

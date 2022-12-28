@@ -7,9 +7,11 @@ import { Label } from '@progress/kendo-react-labels';
 import { ListView } from '@progress/kendo-react-listview';
 import React, { useEffect, useState } from 'react';
 import useLocalStorageState from 'use-local-storage-state';
+import { useParams } from 'react-router-dom';
 import Comment from './Comment';
 
 export default function TaskEditDialog(props) {
+  const { boardId } = useParams();
   const [title, setTitle] = useState(props.title);
   const [description, setDescription] = useState(props.description);
   const [priority, setPriority] = useState(props.priority);
@@ -24,15 +26,18 @@ export default function TaskEditDialog(props) {
   );
   const [comment, setComment] = useState('');
   const [openEditor, setOpenEditor] = useState(false);
-  const [statuses, setStatuses] = useState(
-    JSON.parse(localStorage.getItem('statuses'))
-  );
+  const [statuses, setStatuses] = useLocalStorageState('statuses', {
+    defaultValue: [],
+  });
   const [comments, setComments] = useState(props.task?.comments);
   const [tasks, setTasks] = useLocalStorageState('tasks', {
     defaultValue: [],
   });
   const [status, setStatus] = useLocalStorageState('status', {
     defaultValue: '',
+  });
+  const [users, setUsers] = useLocalStorageState('users', {
+    defaultValue: [],
   });
   const [subTasks, setSubTasks] = useState([]);
   const [priorities, setPriorities] = useState(props.priorities);
@@ -78,6 +83,7 @@ export default function TaskEditDialog(props) {
       }),
       body: JSON.stringify({
         id: props.task.id,
+        boardId: boardId,
         type: type,
         status: props.task.status,
         assignedToId: assignTo,
@@ -132,9 +138,9 @@ export default function TaskEditDialog(props) {
       body: JSON.stringify({
         type: type,
         status: status,
-        boardId: JSON.parse(localStorage.getItem('boardId')),
+        boardId: boardId,
         parentItem: null,
-        assignedToId: assignTo,
+        assignedToEmail: assignTo,
         dueDate: dueDate,
         importance: priority.priority,
         title: title,
@@ -308,7 +314,7 @@ export default function TaskEditDialog(props) {
             <Label editorId={'assignTo'}>Assign To:</Label>
             <DropDownList
               id={'assignTo'}
-              data={boardUsers}
+              data={users}
               defaultItem={assignTo}
               onChange={(e) => setAssignTo(e.target.value)}
               title='Assign To'

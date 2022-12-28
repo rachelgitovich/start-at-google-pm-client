@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import Sidebar from '../SideBar';
 import NavBar from '../NavBar';
 
+
 export default function AppLayout({isAuthenticated}) {
   const navigate = useNavigate();
   useEffect(() => {
@@ -11,7 +12,7 @@ export default function AppLayout({isAuthenticated}) {
 
   return (
     <>
-      <NavBar />
+      <NavBar/>
       <div className="appLayout">
         <Sidebar />
         <div className="app-content">
