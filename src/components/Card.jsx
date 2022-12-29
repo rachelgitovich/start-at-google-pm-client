@@ -6,8 +6,14 @@ import {
 import React, { useState } from 'react';
 import { PreviewDialog } from './PreviewDialog';
 import TaskEditDialog from './TaskEditDialog';
+import useLocalStorageState from 'use-local-storage-state';
 const CardHeaderComponent = (props) => {
-  return <TaskBoardCardHeader {...props} title={props.task.title} />;
+  const [permission, setPermission] = useLocalStorageState('permission', {
+    defaultValue: '',
+  });
+  console.log("card header", props)
+  const menuItems=permission=='LEADER'||permission=='USER'?[props.menuItems[0]]:props.menuItems;
+  return <TaskBoardCardHeader {...props} menuItems={menuItems} title={props.task.title} />;
 };
 const CardBodyComponent = (props) => {
   return (

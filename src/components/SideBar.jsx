@@ -23,7 +23,7 @@ const Sidebar = (props) => {
   };
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/v1/board/all', requestOptions)
+    fetch('http://localhost:8080/api/v1/board/get/all', requestOptions)
       .then((response) => {
         if (response.ok) {
           response.json().then((result) => {

@@ -15,11 +15,13 @@ export default function TaskEditDialog(props) {
   const [title, setTitle] = useState(props.title);
   const [description, setDescription] = useState(props.description);
   const [priority, setPriority] = useState(props.priority);
-  const [assignTo, setAssignTo] = useState(props.task?.assignedTo);
   const [boardUsers, setBoardUsers] = useState([]);
   const [type, setType] = useState(props.task?.type);
   const [types, setTypes] = useLocalStorageState('types', {
     defaultValue: [],
+  });
+  const [permission, setPermission] = useLocalStorageState('permission', {
+    defaultValue: '',
   });
   const [dueDate, setDueDate] = useState(
     props.task ? new Date(props.task.dueDate) : null
@@ -39,6 +41,7 @@ export default function TaskEditDialog(props) {
   const [users, setUsers] = useLocalStorageState('users', {
     defaultValue: [],
   });
+  const [assignTo, setAssignTo] = useState(props.task?.assignTo?.email);
   const [subTasks, setSubTasks] = useState([]);
   const [priorities, setPriorities] = useState(props.priorities);
   useEffect(() => {
@@ -65,7 +68,13 @@ export default function TaskEditDialog(props) {
         .catch((error) => console.log('error', error));
     }
   }, []);
-
+  useEffect(()=>{
+    if(users.length>0){
+      debugger
+      let assignedUser=users.find(user=>user===props.task?.assignedTo?.email)
+      setAssignTo(assignedUser||'')
+    }
+  },[users])
   const createOrUpdateItem = (event) => {
     if (props.saveButton === 'Create') {
       createItem(event);
@@ -86,7 +95,7 @@ export default function TaskEditDialog(props) {
         boardId: boardId,
         type: type,
         status: props.task.status,
-        assignedToId: assignTo,
+        assignedToEmail: assignTo,
         dueDate: dueDate,
         importance: priority.priority,
         title: title,
@@ -123,7 +132,8 @@ export default function TaskEditDialog(props) {
             props.onClose();
           });
         } else {
-          response.json().then((result) => alert(result.message));
+          response.json().then((result) =>{
+             alert(result.message)});
         }
       })
       .catch((error) => console.log('error', error));
@@ -188,6 +198,7 @@ export default function TaskEditDialog(props) {
       body: JSON.stringify({
         itemId: props.task.id,
         comment: comment,
+        boardId: boardId
       }),
       redirect: 'follow',
     };
@@ -275,13 +286,14 @@ export default function TaskEditDialog(props) {
 
       <div className='k-taskboard-pane-content'>
         <div role='form' data-role='form' className='k-form'>
-          <FieldWrapper>
+         <FieldWrapper>
             <Label editorId={'title'}>{props.titleLabel}</Label>
             <Input
               id={'title'}
               onChange={(e) => setTitle(e.target.value)}
               value={title}
               title={props.titleInputTitle}
+              disabled={permission==='USER'||(permission=='LEADER'&&props.saveButton==='Save changes')}
             />
           </FieldWrapper>
 
@@ -292,6 +304,7 @@ export default function TaskEditDialog(props) {
               onChange={(e) => setDescription(e.target.value)}
               value={description}
               title={props.descriptionInputTitle}
+              disabled={permission==='USER'||(permission=='LEADER'&&props.saveButton==='Save changes')}
             />
           </FieldWrapper>
 
@@ -307,15 +320,19 @@ export default function TaskEditDialog(props) {
               itemRender={itemRender}
               valueRender={valueRender}
               title={props.priorityDropDownTitle}
+              disabled={permission==='USER'||(permission=='LEADER'&&props.saveButton==='Save changes')}
             />
           </FieldWrapper>
 
           <FieldWrapper>
             <Label editorId={'assignTo'}>Assign To:</Label>
             <DropDownList
+              disabled={permission==='USER'}
               id={'assignTo'}
               data={users}
-              defaultItem={assignTo}
+              value={assignTo}
+              // defaultValue={assignTo}
+              // defaultItem={assignTo}
               onChange={(e) => setAssignTo(e.target.value)}
               title='Assign To'
             />
@@ -324,6 +341,7 @@ export default function TaskEditDialog(props) {
             <Label editorId={'types'}>Type:</Label>
 
             <DropDownList
+              disabled={permission==='USER'||(permission=='LEADER'&&props.saveButton==='Save changes')}
               id={'type'}
               data={types}
               value={type}
@@ -334,6 +352,7 @@ export default function TaskEditDialog(props) {
           <FieldWrapper>
             <Label editorId={'subItems'}>Sub Items:</Label>
             <MultiSelect
+              disabled={permission==='USER'||(permission=='LEADER'&&props.saveButton==='Save changes')}
               data={tasks.filter((t) => t.id !== props.task?.id)}
               textField='title'
               value={subTasks}
@@ -343,6 +362,7 @@ export default function TaskEditDialog(props) {
           <FieldWrapper>
             <Label editorId={'dueDate'}>Due Date:</Label>
             <DatePicker
+              disabled={permission==='USER'||(permission=='LEADER'&&props.saveButton==='Save changes')}
               defaultValue={dueDate}
               format='dd/MM/yyyy'
               onChange={(e) => setDueDate(e.value)}
@@ -391,7 +411,7 @@ export default function TaskEditDialog(props) {
         <Button
           themeColor={'primary'}
           onClick={createOrUpdateItem}
-          disabled={!title || !description}
+          disabled={permission=='USER'||(!title || !description)}
         >
           {props.saveButton}
         </Button>

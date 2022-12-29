@@ -1,16 +1,20 @@
-import React, { useEffect, useState, useRef } from "react";
-import { ListView } from "@progress/kendo-react-listview";
-import { Popup } from "@progress/kendo-react-popup";
+import React, { useEffect, useState, useRef } from 'react';
+import { ListView } from '@progress/kendo-react-listview';
+import { Popup } from '@progress/kendo-react-popup';
+import { Dialog, DialogActionsBar } from '@progress/kendo-react-dialogs';
 
 const MyItemRender = (props) => {
   let item = props.dataItem;
-
+  useEffect(() => {
+    debugger;
+    console.log(props);
+  }, []);
   return (
     <div
-      className="k-listview-item"
+      className='k-listview-item'
       style={{
         padding: 10,
-        borderBottom: "1px solid lightgrey",
+        borderBottom: '1px solid lightgrey',
       }}
     >
       <p>
@@ -33,12 +37,14 @@ const MyItemRender = (props) => {
   );
 };
 
-const NotificationList = ({ ref }) => {
+const NotificationList = ({ anchor }) => {
   const [notifications, setNotification] = useState([]);
-
+useEffect(()=>{
+  console.log(anchor)
+},[])
   useEffect(() => {
     fetch(
-      "http://localhost:8080/api/v1/user/userNotification",
+      'http://localhost:8080/api/v1/user/userNotification',
       requestOptionsGet
     )
       .then((response) => {
@@ -48,30 +54,51 @@ const NotificationList = ({ ref }) => {
           });
         }
       })
-      .catch((error) => console.log("error", error));
-  }, [notifications]);
+      .catch((error) => console.log('error', error));
+  }, []);
 
   let requestOptionsGet = {
-    method: "GET",
+    method: 'GET',
     headers: new Headers({
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     }),
   };
 
   return (
-    <div>
-      <Popup anchor={ref} show={true} popupClass={"popup-content"}>
-        <ListView
-          data={notifications}
-          item={MyItemRender}
-          style={{
-            width: "100%",
-            height: 600,
-          }}
-        />
-      </Popup>
-    </div>
+  //   <Dialog>
+  //  <ListView
+  //       data={notifications}
+  //       item={MyItemRender}
+  //       style={{
+  //         width: '100%',
+  //         height: 600,
+  //       }}
+  //     />
+  // </Dialog>
+    <Popup
+      
+      anchorAlign={{
+        horizontal: 'left',
+        vertical: 'bottom',
+      }}
+      // popupAlign={{
+      //   horizontal: 'right',
+      //   vertical: 'top',
+      // }}
+      anchor={anchor.current}
+      show={true}
+      popupClass={'popup-content'}
+    >
+      <ListView
+        data={notifications}
+        item={MyItemRender}
+        // style={{
+        //   width: '100%',
+        //   height: 600,
+        // }}
+      />
+    </Popup>
   );
 };
 

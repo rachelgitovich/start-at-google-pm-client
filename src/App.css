@@ -54,6 +54,7 @@
 }
 .navbar {
   height: 7vh;
+  align-content: center;
 }
 .shareDropDown {
   width: 150px;
