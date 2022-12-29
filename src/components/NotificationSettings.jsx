@@ -1,34 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { Switch } from "@progress/kendo-react-inputs";
 import { Checkbox } from "@progress/kendo-react-inputs";
 
 const NotificationSetting = () => {
-  const [checkedEmailNotify, setCheckedEmailNotify] = useState(true);
-  const [checkedPopupNotify, setCheckedPopupNotify] = useState(true);
-
-  const [checkedAssignToMe, setCheckedAssignToMe] = useState(true);
-  const [checkedStatusChanged, setStatusChanged] = useState(true);
-  const [checkedCommentAdded, setCheckedCommentAdded] = useState(true);
-  const [checkedDeleted, setCheckedDeleted] = useState(true);
-  const [checkedDataChanged, setCheckedDataChanged] = useState(true);
-  const [checkedUserAddedToTheSystem, setCheckedUserAddedToTheSystem] =
+  /**Email notification type */
+  const [checkedAssignToMeEmail, setCheckedAssignToMeEmail] = useState(true);
+  const [checkedStatusChangedEmail, setStatusChangedEmail] = useState(true);
+  const [checkedCommentAddedEmail, setCheckedCommentAddedEmail] =
     useState(true);
+  const [checkedDeletedEmail, setCheckedDeletedEmail] = useState(true);
+  const [checkedDataChangedEmail, setCheckedDataChangedEmail] = useState(true);
+  const [
+    checkedUserAddedToTheSystemEmail,
+    setCheckedUserAddedToTheSystemEmail,
+  ] = useState(true);
 
+  /**Popup notification type */
+  const [checkedAssignToMePopup, setCheckedAssignToMePopup] = useState(true);
+  const [checkedStatusChangedPopup, setStatusChangedPopup] = useState(true);
+  const [checkedCommentAddedPopup, setCheckedCommentAddedPopup] =
+    useState(true);
+  const [checkedDeletedPopup, setCheckedDeletedPopup] = useState(true);
+  const [checkedDataChangedPopup, setCheckedDataChangedPopup] = useState(true);
+  const [
+    checkedUserAddedToTheSystemPopup,
+    setCheckedUserAddedToTheSystemPopup,
+  ] = useState(true);
+
+  /** set the state (email setting) on db when the page loaded */
   useEffect(() => {
     fetch(
-      "http://localhost:8080/api/v1/user/getUserNotificationType",
+      "http://localhost:8080/api/v1/user/getUserNotificationTypeEmail",
       requestOptionsGet
     )
       .then((response) => {
         if (response.ok) {
           response.json().then((result) => {
             console.log(result);
-            setCheckedAssignToMe(result.data["ASSIGN_TO_ME"]);
-            setStatusChanged(result.data["STATUS_CHANGED"]);
-            setCheckedCommentAdded(result.data["COMMENT_ADDED"]);
-            setCheckedDeleted(result.data["DELETED"]);
-            setCheckedDataChanged(result.data["DATA_CHANGED"]);
-            setCheckedUserAddedToTheSystem(
+            setCheckedAssignToMeEmail(result.data["ASSIGN_TO_ME"]);
+            setStatusChangedEmail(result.data["STATUS_CHANGED"]);
+            setCheckedCommentAddedEmail(result.data["COMMENT_ADDED"]);
+            setCheckedDeletedEmail(result.data["DELETED"]);
+            setCheckedDataChangedEmail(result.data["DATA_CHANGED"]);
+            setCheckedUserAddedToTheSystemEmail(
               result.data["USER_ADDED_TO_THE_SYSTEM"]
             );
           });
@@ -37,33 +50,30 @@ const NotificationSetting = () => {
       .catch((error) => console.log("error", error));
   }, []);
 
+  /** set the state (popup setting) on db when the page loaded */
+
   useEffect(() => {
     fetch(
-      "http://localhost:8080/api/v1/user/getUserNotificationBySettings",
+      "http://localhost:8080/api/v1/user/getUserNotificationTypePopup",
       requestOptionsGet
     )
       .then((response) => {
         if (response.ok) {
           response.json().then((result) => {
             console.log(result);
-            setCheckedEmailNotify(result.data["email"]);
-            setCheckedPopupNotify(result.data["popup"]);
+            setCheckedAssignToMePopup(result.data["ASSIGN_TO_ME"]);
+            setStatusChangedPopup(result.data["STATUS_CHANGED"]);
+            setCheckedCommentAddedPopup(result.data["COMMENT_ADDED"]);
+            setCheckedDeletedPopup(result.data["DELETED"]);
+            setCheckedDataChangedPopup(result.data["DATA_CHANGED"]);
+            setCheckedUserAddedToTheSystemPopup(
+              result.data["USER_ADDED_TO_THE_SYSTEM"]
+            );
           });
         }
       })
       .catch((error) => console.log("error", error));
   }, []);
-
-  const handleNotificationSetting = (event) => {
-    console.log("The switch was toggled");
-    console.log(event);
-    if (event.target.name === "email") {
-      setCheckedEmailNotify(!checkedEmailNotify);
-    } else if (event.target.name === "popup") {
-      setCheckedPopupNotify(!checkedPopupNotify);
-    }
-    updateNotifyBy(event.target.value, event.target.name);
-  };
 
   let requestOptionsPatch = {
     method: "PATCH",
@@ -80,56 +90,91 @@ const NotificationSetting = () => {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     }),
   };
-  const updateNotifyBy = async (choice, type) => {
-    fetch(
-      "http://localhost:8080/api/v1/user/updateNotifyBy?notify=" +
-        choice +
-        "&type=" +
-        type,
-      requestOptionsPatch
-    )
-      .then((response) => {
-        console.log(response);
-        response.json().then((result) => console.log(result));
-      })
-      .catch((error) => console.log("error", error));
-  };
 
-  const handleTypeChange = (event) => {
+  const handleEmailTypeChange = (event) => {
     console.log("The checkbox was toggled");
     console.log(event);
-    changeStateEvent(event.target.name);
-    updateNotifyTypeSetting(event.target.name, event.target.value);
+    changeStateEventEmail(event.target.name);
+    updateEmailNotifyTypeSetting(event.target.name, event.target.value);
   };
 
-  const changeStateEvent = (name) => {
+  const handlePopupTypeChange = (event) => {
+    console.log("The checkbox was toggled");
+    console.log(event);
+    changeStateEventPopup(event.target.name);
+    updatePopupNotifyTypeSetting(event.target.name, event.target.value);
+  };
+
+  /**Email State */
+  const changeStateEventEmail = (name) => {
     switch (name) {
       case "ASSIGN_TO_ME":
-        setCheckedAssignToMe(!checkedAssignToMe);
+        setCheckedAssignToMeEmail(!checkedAssignToMeEmail);
         break;
       case "STATUS_CHANGED":
-        setStatusChanged(!checkedStatusChanged);
+        setStatusChangedEmail(!checkedStatusChangedEmail);
         break;
       case "COMMENT_ADDED":
-        setCheckedCommentAdded(!checkedCommentAdded);
+        setCheckedCommentAddedEmail(!checkedCommentAddedEmail);
         break;
       case "DELETED":
-        setCheckedDeleted(!checkedDeleted);
+        setCheckedDeletedEmail(!checkedDeletedEmail);
         break;
       case "DATA_CHANGED":
-        setCheckedDataChanged(!checkedDataChanged);
+        setCheckedDataChangedEmail(!checkedDataChangedEmail);
         break;
       case "USER_ADDED_TO_THE_SYSTEM":
-        setCheckedUserAddedToTheSystem(!checkedUserAddedToTheSystem);
+        setCheckedUserAddedToTheSystemEmail(!checkedUserAddedToTheSystemEmail);
         break;
       default:
         break;
     }
   };
 
-  const updateNotifyTypeSetting = async (type, choice) => {
+  /**Popup State */
+  const changeStateEventPopup = (name) => {
+    switch (name) {
+      case "ASSIGN_TO_ME":
+        setCheckedAssignToMePopup(!checkedAssignToMePopup);
+        break;
+      case "STATUS_CHANGED":
+        setStatusChangedPopup(!checkedStatusChangedPopup);
+        break;
+      case "COMMENT_ADDED":
+        setCheckedCommentAddedPopup(!checkedCommentAddedPopup);
+        break;
+      case "DELETED":
+        setCheckedDeletedPopup(!checkedDeletedPopup);
+        break;
+      case "DATA_CHANGED":
+        setCheckedDataChangedPopup(!checkedDataChangedPopup);
+        break;
+      case "USER_ADDED_TO_THE_SYSTEM":
+        setCheckedUserAddedToTheSystemPopup(!checkedUserAddedToTheSystemPopup);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const updateEmailNotifyTypeSetting = async (type, choice) => {
     fetch(
-      "http://localhost:8080/api/v1/user/updateNotificationType?notificationType=" +
+      "http://localhost:8080/api/v1/user/updateEmailNotificationType?notificationType=" +
+        type +
+        "&update=" +
+        choice,
+      requestOptionsPatch
+    )
+      .then((response) => {
+        response.json();
+      })
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+
+  const updatePopupNotifyTypeSetting = async (type, choice) => {
+    fetch(
+      "http://localhost:8080/api/v1/user/updatePopupNotificationType?notificationType=" +
         type +
         "&update=" +
         choice,
@@ -144,70 +189,106 @@ const NotificationSetting = () => {
   return (
     <>
       <div>
+        <h2 style={{ fontSize: "24px", color: "green" }}>
+          Email notifications
+        </h2>
         <h3>
           Please select which of the type notifications you would like to
-          receive an update
+          receive an Email update :
         </h3>
         <Checkbox
           label={"item assign to me"}
           name={"ASSIGN_TO_ME"}
-          value={checkedAssignToMe}
-          onChange={handleTypeChange}
+          value={checkedAssignToMeEmail}
+          onChange={handleEmailTypeChange}
         />
         <br />
         <Checkbox
           label={"status changed"}
           name={"STATUS_CHANGED"}
-          value={checkedStatusChanged}
-          onChange={handleTypeChange}
+          value={checkedStatusChangedEmail}
+          onChange={handleEmailTypeChange}
         />
         <br />
         <Checkbox
           label={"comment added"}
           name={"COMMENT_ADDED"}
-          value={checkedCommentAdded}
-          onChange={handleTypeChange}
+          value={checkedCommentAddedEmail}
+          onChange={handleEmailTypeChange}
         />
         <br />
         <Checkbox
           label={"item deleted"}
           name={"DELETED"}
-          value={checkedDeleted}
-          onChange={handleTypeChange}
+          value={checkedDeletedEmail}
+          onChange={handleEmailTypeChange}
         />
         <br />
         <Checkbox
           label={"data item changed"}
           name={"DATA_CHANGED"}
-          value={checkedDataChanged}
-          onChange={handleTypeChange}
+          value={checkedDataChangedEmail}
+          onChange={handleEmailTypeChange}
         />
         <br />
         <Checkbox
           label={"user added to the system"}
           name={"USER_ADDED_TO_THE_SYSTEM"}
-          value={checkedUserAddedToTheSystem}
-          onChange={handleTypeChange}
+          value={checkedUserAddedToTheSystemEmail}
+          onChange={handleEmailTypeChange}
         />
       </div>
       <br />
-      <div className="notification">
-        <Switch
-          id="emailNotify"
-          name="email"
-          value={checkedEmailNotify}
-          onChange={handleNotificationSetting}
-        />
-        <label for="emailNotify"> get email notification </label>
-        <br />
 
-        <Switch
-          id="popupNotify"
-          name="popup"
-          value={checkedPopupNotify}
-          onChange={handleNotificationSetting}
+      <div>
+        <h2 style={{ fontSize: "24px", color: "green" }}>
+          Popup notifications
+        </h2>
+        <h3>
+          Please select which of the type notifications you would like to
+          receive an Popup update:
+        </h3>
+        <Checkbox
+          label={"item assign to me"}
+          name={"ASSIGN_TO_ME"}
+          value={checkedAssignToMePopup}
+          onChange={handlePopupTypeChange}
         />
-        <label for="popupNotify">get popup notification</label>
+        <br />
+        <Checkbox
+          label={"status changed"}
+          name={"STATUS_CHANGED"}
+          value={checkedStatusChangedPopup}
+          onChange={handlePopupTypeChange}
+        />
+        <br />
+        <Checkbox
+          label={"comment added"}
+          name={"COMMENT_ADDED"}
+          value={checkedCommentAddedPopup}
+          onChange={handlePopupTypeChange}
+        />
+        <br />
+        <Checkbox
+          label={"item deleted"}
+          name={"DELETED"}
+          value={checkedDeletedPopup}
+          onChange={handlePopupTypeChange}
+        />
+        <br />
+        <Checkbox
+          label={"data item changed"}
+          name={"DATA_CHANGED"}
+          value={checkedDataChangedPopup}
+          onChange={handlePopupTypeChange}
+        />
+        <br />
+        <Checkbox
+          label={"user added to the system"}
+          name={"USER_ADDED_TO_THE_SYSTEM"}
+          value={checkedUserAddedToTheSystemPopup}
+          onChange={handlePopupTypeChange}
+        />
       </div>
     </>
   );
