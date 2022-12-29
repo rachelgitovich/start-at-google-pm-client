@@ -49,7 +49,7 @@ const NotificationList = ({ ref }) => {
         }
       })
       .catch((error) => console.log("error", error));
-  }, [notifications]);
+  }, []);
 
   let requestOptionsGet = {
     method: "GET",
