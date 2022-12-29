@@ -22,7 +22,6 @@ const NotificationSetting = () => {
       .then((response) => {
         if (response.ok) {
           response.json().then((result) => {
-            console.log(result);
             setCheckedAssignToMe(result.data["ASSIGN_TO_ME"]);
             setStatusChanged(result.data["STATUS_CHANGED"]);
             setCheckedCommentAdded(result.data["COMMENT_ADDED"]);

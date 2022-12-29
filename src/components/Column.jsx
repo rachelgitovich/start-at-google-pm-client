@@ -6,7 +6,7 @@ import { TaskBoardColumn } from '@progress/kendo-react-taskboard';
 import React, { useState, useEffect } from 'react';
 import useLocalStorageState from 'use-local-storage-state';
 import TaskEditDialog from './TaskEditDialog';
-import  ConfirmDeleteDialog  from './ConfirmDeleteDialog';
+import ConfirmDeleteDialog from './ConfirmDeleteDialog';
 const colors = ['primary', 'secondary', 'warning', 'info', 'success', 'dark'];
 
 const ColumnHeader = (props) => {
@@ -16,6 +16,9 @@ const ColumnHeader = (props) => {
   );
   const [status, setStatus] = useLocalStorageState('status', {
     defaultValue: props.column.status,
+  });
+  const [permission, setPermission] = useLocalStorageState('permission', {
+    defaultValue: '',
   });
   const addItem = () => {
     setStatus(props.column.title);
@@ -64,24 +67,20 @@ const ColumnHeader = (props) => {
           'k-disabled': edit,
         })}
       >
-        <Button
-          fillMode='flat'
-          icon='edit'
-          title={props.editButtonTitle}
-          onClick={props.onColumnEnterEdit}
-        />
-        <Button
+        {(permission === 'ADMIN'||permission==='LEADER')&&<Button
           fillMode='flat'
           icon='add'
           title={props.addButtonTitle}
           onClick={addItem}
-        />
-        <Button
-          fillMode='flat'
-          icon='close'
-          title={props.closeButtonTitle}
-          onClick={props.onColumnDelete}
-        />
+        />}
+        {permission === 'ADMIN' && (
+          <Button
+            fillMode='flat'
+            icon='close'
+            title={props.closeButtonTitle}
+            onClick={props.onColumnDelete}
+          />
+        )}
       </div>
     </div>
   );
