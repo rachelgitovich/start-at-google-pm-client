@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-
 export default function GithubAuth({ setIsAuthenticated }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -18,7 +17,6 @@ export default function GithubAuth({ setIsAuthenticated }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((result) => {
-            debugger;
             localStorage.setItem('token', result.data);
             setIsAuthenticated(true);
             navigate('/');

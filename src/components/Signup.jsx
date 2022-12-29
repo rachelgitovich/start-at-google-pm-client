@@ -1,6 +1,5 @@
 import { Button } from '@progress/kendo-react-buttons';
 import { Input } from '@progress/kendo-react-inputs';
-import { async } from 'q';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SignUpPopup from './SignUpPopup';
@@ -70,7 +69,6 @@ const Signup = () => {
                 minLength={2}
                 required={true}
                 margin='normal'
-                fullWidth
                 id={'Email'}
                 disabled={loading}
               />
@@ -86,7 +84,6 @@ const Signup = () => {
                 label='Password'
                 required={true}
                 margin='normal'
-                fullWidth
                 id={'password'}
                 disabled={loading}
                 minLength={8}
@@ -110,7 +107,6 @@ const Signup = () => {
                 validationMessage={confirmPasswordValidationMessage}
                 margin='normal'
                 required
-                fullWidth
                 id={'confirmPassword'}
                 disabled={loading}
               />
@@ -127,7 +123,7 @@ const Signup = () => {
         <div className='k-d-flex k-flex-column'>
           <a
             href='https://github.com/login/oauth/authorize?client_id=3832c4b642dd6c67333d&scope=user:email'
-            className='k-button k-button-md k-button-solid k-button-solid-base k-rounded-md k-mt-3 k-mb-2 google-btn'
+            className='k-button k-button-md k-button-solid k-button-solid-base k-rounded-md k-mt-3 k-mb-2 github-btn'
           >
             <i className='k-button-icon fa-brands fa-github fa-fw'></i>
             Sign up with GitHub

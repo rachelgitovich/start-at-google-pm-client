@@ -1,25 +1,23 @@
+import React from 'react'
 import { Button } from '@progress/kendo-react-buttons';
 import { Dialog, DialogActionsBar } from '@progress/kendo-react-dialogs';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
-export default function SignUpPopup() {
-  const navigate = useNavigate();
+export default function TypeAddedDialog({close}) {
   return (
-    <Dialog>
+    <Dialog onClose={close}>
       <p
         style={{
           margin: '25px',
           textAlign: 'center',
         }}
       >
-        User registered successfully!
+        Type added successfully!
       </p>
       <DialogActionsBar>
-        <Button themeColor={'primary'} onClick={() => navigate('/login')}>
+        <Button themeColor={'primary'} onClick={() => close()}>
           OK
         </Button>
       </DialogActionsBar>
     </Dialog>
-  );
+  )
 }

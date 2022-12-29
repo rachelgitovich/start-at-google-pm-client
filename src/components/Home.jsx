@@ -1,23 +1,16 @@
-import { Button } from '@progress/kendo-react-buttons'
-import React from 'react'
-import { useNavigate } from "react-router-dom"
+import { Button } from '@progress/kendo-react-buttons';
+import React, {useState} from 'react';
+import CreateBoardDialog from './CreateBoardDialog';
 
 export default function Home() {
-    const navigate = useNavigate()
-  
-    const createBoard = async () => {
-   
-    }
-  
-    return (
-      <div className='home'>
-        <Button
-        fillMode={"outline"}
-        themeColor={"success"}
-          onClick={createBoard}
-        >
-          Click here to create your first board
-        </Button>
-      </div>
-    )
+  const [showDialog, setShowDialog] = useState(false);
+
+  return (
+    <div className='home'>
+      <Button icon='add' onClick={() => setShowDialog(true)}>
+        Create new board
+      </Button>
+      {showDialog && <CreateBoardDialog close={()=>setShowDialog(false)}/>}
+    </div>
+  );
 }
